@@ -22,6 +22,11 @@ Workflow:
         + [ ] Improve results
     + [ ] Search for other methods
 
+Other Things To Do:
+===================
++ [ ] Learn how to [pickle/serialize objects](https://wiki.python.org/moin/UsingPickle). Apply to data sets and trained classifier for faster iteration.
+
 References:
 ==========
 http://www.kaggle.com/c/facial-keypoints-detection/details/getting-started-with-r
+https://wiki.python.org/moin/UsingPickle
