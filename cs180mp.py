@@ -1,7 +1,7 @@
 '''
 Open File
 Reference for manipulating CSV file: http://docs.python.org/2/library/csv.html
-Training set is 31 x 12084 matrix (first row is disregarded since they are headers)
+Training set is 31 x 7k+ matrix (first row is disregarded since they are headers)
 Columns 1-30 are keypoints while column 31 is the image data
 Each row represents a sample, each column represents a feature.
 scikit-learn follows a (sample, feature) format so convert to that 
@@ -63,4 +63,29 @@ with open('training.csv', 'rb') as csvfile:
 		averageArray.append(tempAverage)
 		#print feature[0]
 	
-	print averageArray
+	#print averageArray
+
+
+	'''
+	Conversion of Vector to Image
+	+ Use split to separate " "
+	+ Use scikit-learn
+	+ Use this format:
+	[[  0.   0.   5. ...,   0.   0.   0.]
+ 	 [  0.   0.   0. ...,  10.   0.   0.]
+	 [  0.   0.   0. ...,  16.   9.   0.]
+	 ...,
+	 [  0.   0.   1. ...,   6.   0.   0.]
+	 [  0.   0.   2. ...,  12.   0.   0.]
+	 [  0.   0.  10. ...,  12.   1.   0.]]
+
+	+http://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html
+	'''
+
+
+	'''
+	Generating and using Image Patches
+	References:
+	http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.image.extract_patches_2d.html
+
+	'''

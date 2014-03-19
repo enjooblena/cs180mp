@@ -30,3 +30,5 @@ References:
 ==========
 http://www.kaggle.com/c/facial-keypoints-detection/details/getting-started-with-r
 https://wiki.python.org/moin/UsingPickle
+http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.image.extract_patches_2d.html
+http://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html
