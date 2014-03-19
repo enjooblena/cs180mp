@@ -5,10 +5,10 @@ CS 180 MP: Machine Learning Project Proposal: [Facial Keypoint Detection](http:/
 
 Workflow:
 =========
-+ [ ] Pre-process csv files
-+ [ ] Convert csv files to data sets
-+ [ ] Produce mean keypoint locations from training set
-+ [ ] Try out simple algorithm (mean keypoint positions, image not used)
++ [x] Pre-process csv files
++ [x] Convert csv files to data sets
++ [x] Produce mean keypoint locations from training set
++ [x] Try out simple algorithm (mean keypoint positions, image not used)
 + [ ] Develop better algorithm
     + [ ] Use image patches
         + [ ] Convert R tutorial code to Python and implement
