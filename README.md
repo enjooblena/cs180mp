@@ -9,14 +9,14 @@ Workflow:
 + [x] Convert csv files to data sets
 + [x] Produce mean keypoint locations from training set
 + [x] Try out simple algorithm (mean keypoint positions, image not used)
-+ [ ] Develop better algorithm
-    + [ ] Use image patches
-        + [ ] Convert R tutorial code to Python and implement
-            + [ ] Produce average patch for all keypoints
++ [-] Develop better algorithm
+    + [-] Use image patches
+        + [-] Convert R tutorial code to Python and implement
+            + [-] Produce average patch for all keypoints
             + [ ] Write code for finding best match
                 + [ ] Apply algo to all keypoints
             + _OR: (easier/faster route)_
-            + [ ] produce average patch for at least one key point
+            + [x] produce average patch for at least one key point
             + [ ] Find best match for average patch
             + [ ] Apply average keypoint positions relative to found keypoint
         + [ ] Improve results
@@ -24,7 +24,7 @@ Workflow:
 
 Other Things To Do:
 ===================
-+ [ ] Learn how to [pickle/serialize objects](https://wiki.python.org/moin/UsingPickle). Apply to data sets and trained classifier for faster iteration.
++ [x] Learn how to [pickle/serialize objects](https://wiki.python.org/moin/UsingPickle). Apply to data sets and trained classifier for faster iteration.
 
 References:
 ==========
@@ -32,3 +32,4 @@ http://www.kaggle.com/c/facial-keypoints-detection/details/getting-started-with-
 https://wiki.python.org/moin/UsingPickle
 http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.image.extract_patches_2d.html
 http://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html
+http://matplotlib.org/examples/pylab_examples/matshow.html

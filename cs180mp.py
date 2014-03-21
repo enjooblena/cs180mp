@@ -15,6 +15,10 @@ Deals with pre-processing of data, conversion to a format for use with scikit-le
 #Pre-process CSV file for conversion
 import csv
 import math
+import pylab as pl
+from matplotlib.pylab import *
+import cPickle as pickle
+
 with open('training.csv', 'rb') as csvfile:
 	preprocessReader = csv.reader(csvfile, delimiter = ',', quotechar = '|')
 	counter = 1
@@ -79,8 +83,54 @@ with open('training.csv', 'rb') as csvfile:
 	 [  0.   0.   2. ...,  12.   0.   0.]
 	 [  0.   0.  10. ...,  12.   1.   0.]]
 
-	+http://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html
+	http://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html
+	http://matplotlib.org/examples/pylab_examples/matshow.html
+	http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.image.extract_patches_2d.html#sklearn.feature_extraction.image.extract_patches_2d
+
+	use reshape((x,y)) to transform vector to 2 dimensional array
+	e.g:
+		>>> from sklearn.feature_extraction import image
+		>>> one_image = np.arange(16).reshape((4, 4))
+
+	Pictures are 96x96 matrix
 	'''
+
+	pl.gray()	#makes graph grayscale
+	testGraph = featureArray[-1][1].split(" ")	#fetches first data from image set
+	imageGraph = zeros((96, 96))	#creates 96x96 array of 0s
+	
+	'''
+	imageGraph = []
+
+	for i in range(0, len(featureArray[-1])):	#creates a n x 96 x 96 array where n is the number of images
+		imageGraph.append(zeros((96,96)))
+
+	'''
+
+	pixelCounter = 0
+	for i in range(0,96):			#populates array with value from image
+		for j in range(0,96):
+			imageGraph[i,j] = testGraph[pixelCounter]
+			pixelCounter += 1
+	#IMAGE IS FLIPPED HORIZONTALLY
+
+	#FLIPS IMAGE
+	for i in range(0,96):
+		for j in range(0,48):
+			tempPixel = imageGraph[i,95-j]	#right side pixel
+			imageGraph[i,95-j] = imageGraph[i, j]
+			imageGraph[i,j] = tempPixel
+
+	#print testGraph.shape()
+
+	#shows image on screen
+	matshow(imageGraph)
+	show()
+
+	#Pickle current data - UNTESTED CODE
+	pickle.dump(averageArray, open("averageArray.p", "wb"))
+	pickle.dump(featureArray, open("featureArray.p", "wb"))
+
 
 
 	'''
