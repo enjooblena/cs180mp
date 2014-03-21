@@ -95,43 +95,66 @@ with open('training.csv', 'rb') as csvfile:
 	Pictures are 96x96 matrix
 	'''
 
-	pl.gray()	#makes graph grayscale
-	testGraph = featureArray[-1][1].split(" ")	#fetches first data from image set
-	imageGraph = zeros((96, 96))	#creates 96x96 array of 0s
+	print "Entering value splitting"
+
+	pl.gray()
+	testGraph = []
+	for n in featureArray[-1][1:]:
+		testGraph.append(n.split(" "))	#fetches first data from image set
+		#if len(testGraph)
+	#imageGraph = zeros((96, 96))	#creates 96x96 array of 0s
 	
-	'''
+	#'''
 	imageGraph = []
 
-	for i in range(0, len(featureArray[-1])):	#creates a n x 96 x 96 array where n is the number of images
+	print len(testGraph)			#Use this one
+	print len(featureArray[-1])		#Incorrect because header is still added
+
+	for i in range(0, len(testGraph)):	#creates a n x 96 x 96 array where n is the number of images
 		imageGraph.append(zeros((96,96)))
 
-	'''
+	#'''
+
+	print "Entering array population\n"
 
 	pixelCounter = 0
-	for i in range(0,96):			#populates array with value from image
-		for j in range(0,96):
-			imageGraph[i,j] = testGraph[pixelCounter]
-			pixelCounter += 1
+	for n in range(0, len(testGraph)):
+	#for n in range(0, 2):
+		for i in range(0,96):			#populates array with value from image
+			for j in range(0,96):
+				imageGraph[n][i,j] = testGraph[n][pixelCounter]
+				pixelCounter += 1
+		pixelCounter = 0
 	#IMAGE IS FLIPPED HORIZONTALLY
 
+	#'''
+
+	print "Entering image flipping\n"
+
 	#FLIPS IMAGE
-	for i in range(0,96):
-		for j in range(0,48):
-			tempPixel = imageGraph[i,95-j]	#right side pixel
-			imageGraph[i,95-j] = imageGraph[i, j]
-			imageGraph[i,j] = tempPixel
+	for n in range(0, len(testGraph)):
+	#for n in range(0, 2):
+		for i in range(0,96):
+			for j in range(0,48):
+				tempPixel = imageGraph[n][i, 95-j]	#right side pixel
+				imageGraph[n][i,95-j] = imageGraph[n][i, j]
+				imageGraph[n][i,j] = tempPixel
+	#'''
 
 	#print testGraph.shape()
 
-	#shows image on screen
-	matshow(imageGraph)
-	show()
+
+	#print len(featureArray[-1])
 
 	#Pickle current data - UNTESTED CODE
 	pickle.dump(averageArray, open("averageArray.p", "wb"))
 	pickle.dump(featureArray, open("featureArray.p", "wb"))
+	pickle.dump(imageGraph, open("imageGraph.p", "wb"))
 
 
+	#shows image on screen
+	pl.matshow(imageGraph[1])
+	pl.show()
 
 	'''
 	Generating and using Image Patches
