@@ -1,3 +1,7 @@
+'''
+Contains useful functions. Can be used in main file or in interpreter.
+'''
+
 import math
 import csv
 import pylab as pl
@@ -7,6 +11,70 @@ from sklearn.feature_extraction import image
 import numpy as np
 from sklearn.gaussian_process import GaussianProcess
 from scipy.stats.stats import pearsonr
+
+
+'''
+Loads images saved in filename.csv into imageGraph
+'''
+def loadFile(fileName):
+	csvfile = open(fileName, 'rb')
+	preprocessReader = csv.reader(csvfile, delimiter = ',', quotechar = '|')
+	counter = 1
+	testCounter = 5
+	headerTitle = []
+	featureArray = []
+	for row in preprocessReader:
+		#row[30] is image data
+		#print row[30]
+
+		if counter == 1: #row being read is header
+			for header in row:
+				featureArray.append([header])
+			counter -= 1
+		else:	#row being read is data
+			index = 0
+			for item in row:
+				if (item != "") & (item != " "):
+					featureArray[index].append(item)
+				index += 1
+
+	testGraph = []
+	for n in featureArray[-1][1:]:
+		testGraph.append(n.split(" "))	#fetches first data from image set
+		#if len(testGraph)
+	#imageGraph = zeros((96, 96))	#creates 96x96 array of 0s
+	
+	#'''
+	imageGraph = []
+
+	#print len(testGraph)			#Use this one
+	#print len(featureArray[-1])		#Incorrect because header is still added
+
+	for i in range(0, len(testGraph)):	#creates a n x 96 x 96 array where n is the number of images
+		imageGraph.append(zeros((96,96)))
+
+	#'''
+	pixelCounter = 0
+	for n in range(0, len(testGraph)):
+	#for n in range(0, 2):
+		for i in range(0,96):			#populates array with value from image
+			for j in range(0,96):
+				imageGraph[n][i,j] = testGraph[n][pixelCounter]
+				pixelCounter += 1
+		pixelCounter = 0
+	#IMAGE IS FLIPPED HORIZONTALLY
+
+	#'''
+	#FLIPS IMAGE
+	for n in range(0, len(testGraph)):
+	#for n in range(0, 2):
+		for i in range(0,96):
+			for j in range(0,48):
+				tempPixel = imageGraph[n][i, 95-j]	#right side pixel
+				imageGraph[n][i,95-j] = imageGraph[n][i, j]
+				imageGraph[n][i,j] = tempPixel
+
+	return imageGraph
 
 
 def importFeatureArray():
@@ -158,6 +226,8 @@ def getAllPoints(currentImage, averagePatches, averageArray, NumberOfFeatures = 
 	return points
 
 def displayResult(keypoints, currentImage):
+	pl.ion()
+	pl.gray()
 	pl.matshow(currentImage)
 	for feature in keypoints:
 		print feature
