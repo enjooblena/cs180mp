@@ -133,4 +133,32 @@ def getAveragePatch(featureArray, featureNumber, imageGraph):
 		temp = getAveragePatch(featureArray, index, imageGraph)
 		temp = ndimage.rotate(temp, -90)	#rotates image to proper orientation
 		averagePatch.append(temp)
+
+	averagePatch of feature_n is at math.floor(n/2)
+	'''
+
+	'''
+	patch searching
+	average keypoint of feature is center
+	compute for 
+
+	create search_size*2 + 1 * search_size*2 + 1 array of possibilities
+	center = getCoor(avg_x, avg_y)
+
+	searchMatrix = createSearchMatrix(x, y, search_size)
+
+	createSearchMatrix(x, y, search_size):
+		x1 = x - search_size	#leftmost
+		y1 = y - search_size	#topmost
+		tempMatrix = []
+
+		for y_index in range(y1, y + search_size):
+			for x_index in range(x1, x + search_size):
+				tempMatrix.append([x_index, y_index])
+
+		return tempMatrix
+
+		#tempMatrix structure:
+		[ [x_index1, y_index1]...[x_indexn, y_indexn] ]
+
 	'''
