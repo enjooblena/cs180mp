@@ -12,6 +12,8 @@ Training Part of Program
 Deals with pre-processing of data, conversion to a format for use with scikit-learn and training.
 '''
 
+
+
 #Pre-process CSV file for conversion
 import csv
 import math
@@ -75,6 +77,7 @@ with open('training.csv', 'rb') as csvfile:
 	+ Use split to separate " "
 	+ Use scikit-learn
 	+ Use this format:
+	+ Use numpy arrays
 	[[  0.   0.   5. ...,   0.   0.   0.]
  	 [  0.   0.   0. ...,  10.   0.   0.]
 	 [  0.   0.   0. ...,  16.   9.   0.]
@@ -146,13 +149,17 @@ with open('training.csv', 'rb') as csvfile:
 
 	#print len(featureArray[-1])
 
-	#Pickle current data - UNTESTED CODE
+	#Pickle current data
 	pickle.dump(averageArray, open("averageArray.p", "wb"))
 	pickle.dump(featureArray, open("featureArray.p", "wb"))
 	pickle.dump(imageGraph, open("imageGraph.p", "wb"))
 
 
-	#shows image on screen
+	# shows image on screen
+	# pl.ion() for interactive testing/whatever
+	# pl.plot(x, y, 'bo')
+	# pl.imshow()
+	# http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.imshow
 	pl.matshow(imageGraph[1])
 	pl.show()
 
@@ -160,5 +167,29 @@ with open('training.csv', 'rb') as csvfile:
 	Generating and using Image Patches
 	References:
 	http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.image.extract_patches_2d.html
+
+	Note: Invert the y-coordinates! new_y = 96 - current_y
+	y coordinates are at average/featureArray[x%2 = 1] #all odd indexes up to 29 (30 is image)
+	
+	At patch_size = 21
+	Generates an array of (x - patch_size + 1) * (y - patch_size + 1)
+	Patch with topleft corner (x1, y1) is at patch(x*y1 + x1)
+	e.g: x = 4, y = 4; x1 (0 based) = 2, y1 (0 based) = 3 ; i = 14 (checked and correct wooh)
+
+	A patch centered at (x, y) has is at corner (x1, y1) where
+	x1 = floor(x - patch_size/2) (if x is left to right)
+	y1 = floor(y - patch_size/2) (if y is top to bottom) [coordinate system being followed]
+	'''
+
+	'''
+	Computing score
+	http://stat.ethz.ch/R-manual/R-patched/library/stats/html/cor.html
+	Use correlation
+
+	>>> import numpy as np
+	>>> from sklearn.gaussian_process import GaussianProcess
+	>>> np.score(x, y)
+
+	http://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcess.html
 
 	'''
