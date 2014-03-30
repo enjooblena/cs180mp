@@ -12,6 +12,9 @@ Training Part of Program
 Deals with pre-processing of data, conversion to a format for use with scikit-learn and training.
 '''
 
+'''
+Only needed for training!
+'''
 
 
 #Pre-process CSV file for conversion

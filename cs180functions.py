@@ -4,6 +4,10 @@ import pylab as pl
 from matplotlib.pylab import *
 import cPickle as pickle
 from sklearn.feature_extraction import image
+import numpy as np
+from sklearn.gaussian_process import GaussianProcess
+from scipy.stats.stats import pearsonr
+
 
 def importFeatureArray():
 	with open('training.csv', 'rb') as csvfile:
@@ -38,6 +42,22 @@ def getCoor(x, y, patch_size = 21, x_total = 96, y_total = 96):
 		else:
 			return (x_total-patch_size+1) * y1 + x1
 
+def getCoor2(x, y, patch_size = 21, x_total = 96, y_total = 96):
+		x1 = math.floor(x - patch_size/2)
+		y1 = math.floor(y - patch_size/2)
+		if x1 < 0:
+			x1 = 0
+		if y1 < 0:
+			y1 = 0
+		if x1 > x_total - patch_size:
+			x1 = x_total - patch_size
+		if y1 > y_total - patch_size:
+			y1 = y_total - patch_size
+		return (x_total-patch_size+1) * y1 + x1
+
+def getCenter(x, y, patch_size = 21):
+	return [x + math.floor(patch_size/2 + 1), y + math.floor(patch_size/2 + 1)]
+
 def getPickle(fileName):
 	return pickle.load(open(fileName, "rb"))
 
@@ -47,6 +67,10 @@ def getPatch(x, y, currentImage):
 	else:
 		patches = image.extract_patches_2d(currentImage, (21, 21))	#gets 21x21 patches
 		return patches[int(getCoor(x, y))]
+
+def getPatch2(x, y, currentImage):
+	patches = image.extract_patches_2d(currentImage, (21, 21))	#gets 21x21 patches
+	return patches[int(getCoor2(x, y))]
 
 def getAveragePatch(featureArray, featureNumber, imageGraph):
 	patchArray = []
@@ -104,13 +128,64 @@ def getAveragePatch(featureArray, featureNumber, imageGraph):
 	#print averagePatch
 	return averagePatch
 
-	def getBestMatch(imagePatches, averagePatches, featureNumber):
-		#compute score
-		bestPatch = 0
-		for i in imagePatches:
-			if score(i, averagePatch[featureNumber]) < bestPatch:
-				bestPatch = i
-		return bestPatch
+def getBestMatch(currentImage, averagePatches, averageArray, featureNumber, search_size = 3):
+	#compute score
+	bestPatch = 0
+	bestPatchResult = 0
+	counter = 0
+
+	searchMatrix = createSearchMatrix(float(averageArray[featureNumber]), float(averageArray[featureNumber+1]), search_size)
+
+	for i in searchMatrix:
+		result = computeScore(getPatch2(i[0], i[1], currentImage), averagePatches[int(floor(featureNumber/2))])
+		result = float(result)
+		if counter == 0:
+			bestPatchResult = result
+			bestPatch = i
+			counter += 1
+		if result > bestPatchResult:
+			bestPatchResult = result
+			bestPatch = i
+	return bestPatch
+	#keypoint is at center of patch (11, 11) aka floor(x/2 + 1) #wait whut bat mali 'to
+
+def getAllPoints(currentImage, averagePatches, averageArray, NumberOfFeatures = 30, search_size = 3):
+	points = []
+	for featureNumber in range(0, NumberOfFeatures, 2):
+		#print str(featureNumber) + "\n"
+		points.append(getBestMatch(currentImage, averagePatches, averageArray, featureNumber, search_size))
+	#displayResult(points, currentImage)
+	return points
+
+def displayResult(keypoints, currentImage):
+	pl.matshow(currentImage)
+	for feature in keypoints:
+		print feature
+		pl.plot(feature[0], feature[1], 'bo')
+	pl.show()
+
+def formatBestPatch(bestPatch, currentImage):
+	patch = getPatch(bestPatch[0], bestPatch[1], currentImage)
+	
+def createSearchMatrix(x, y, search_size):
+	x1 = x - search_size	#leftmost
+	y1 = y - search_size	#topmost
+	if x1 < 0:
+		x1 = 0
+	if y1 < 0:
+		y1 = 0
+	tempMatrix = []
+	for y_index in range(int(math.floor(y1)), int(math.floor(y + search_size))):
+		for x_index in range(int(floor(x1)), int(floor(x + search_size))):
+			tempMatrix.append([x_index, y_index])
+	return tempMatrix
+
+def computeScore(x, y):
+	#print x
+	#print y
+	result = pearsonr(x.reshape(441, 1), y.reshape(441, 1))
+	return result[0]
+
 
 	'''
 	Get Pickles
@@ -147,7 +222,7 @@ def getAveragePatch(featureArray, featureNumber, imageGraph):
 
 	searchMatrix = createSearchMatrix(x, y, search_size)
 
-	createSearchMatrix(x, y, search_size):
+	def createSearchMatrix(x, y, search_size):
 		x1 = x - search_size	#leftmost
 		y1 = y - search_size	#topmost
 		tempMatrix = []
@@ -161,4 +236,17 @@ def getAveragePatch(featureArray, featureNumber, imageGraph):
 		#tempMatrix structure:
 		[ [x_index1, y_index1]...[x_indexn, y_indexn] ]
 
+	'''
+
+	'''
+	Computing the score:
+	from scipy.stats.stats import pearsonr
+
+	result = pearsonr(x.reshape(441, 1), y.reshape(441, 1))
+	result = result[0]
+	'''
+
+	'''
+	to display keypoints
+	pl.plot(x, y, 'bo')
 	'''
